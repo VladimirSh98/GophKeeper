@@ -17,6 +17,7 @@ func main() {
 	}
 	application.Server.Start(cancel)
 	<-ctx.Done()
+	application.DB.CloseConnection()
 	application.Server.Stop()
 	application.Logger.Info("Application stopped")
 }
