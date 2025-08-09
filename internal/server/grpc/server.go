@@ -31,7 +31,7 @@ func (s *server) Stop() {
 
 // Init grpc server
 func (s *server) Init() {
-	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(middleware.JWTUnaryInterceptor))
+	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(middleware.JWTUnaryInterceptor(s.cfg)))
 	s.server = grpcServer
 }
 

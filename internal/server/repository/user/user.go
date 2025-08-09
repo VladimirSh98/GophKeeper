@@ -27,3 +27,13 @@ func (repo *Repo) Create(ctx context.Context, login string, password string) (in
 	}
 	return ID, nil
 }
+
+// Delete user
+func (repo *Repo) Delete(ctx context.Context, login string) error {
+	query := "UPDATE \"user\" SET archived = true WHERE login = $1"
+	_, err := repo.Conn.ExecContext(ctx, query, login)
+	if err != nil {
+		return err
+	}
+	return nil
+}

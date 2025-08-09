@@ -8,6 +8,10 @@ import (
 	"strings"
 )
 
+type contextKey string
+
+const UserLoginKey contextKey = "Login"
+
 const (
 	saltSize       = 16
 	hashIterations = 10

@@ -11,13 +11,12 @@ type userAuth struct {
 	tokenString string
 	token       *jwt.Token
 	Login       string
-	cfg         config.Config
 }
 
-func (auth *userAuth) validate() error {
+func (auth *userAuth) validate(cfg *config.Config) error {
 	var err error
 	auth.token, err = jwt.ParseWithClaims(auth.tokenString, auth, func(t *jwt.Token) (interface{}, error) {
-		return []byte(auth.cfg.SecretKey), nil
+		return []byte(cfg.SecretKey), nil
 	})
 	if err != nil {
 		return err
