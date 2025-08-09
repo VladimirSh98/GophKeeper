@@ -6,6 +6,7 @@ import (
 	"net"
 )
 
+// Start grpc server
 func (s *server) Start(cancel context.CancelFunc) {
 	lis, err := net.Listen("tcp", s.cfg.ServerAddress)
 	if err != nil {
@@ -20,13 +21,20 @@ func (s *server) Start(cancel context.CancelFunc) {
 	}()
 }
 
+// Stop grpc server
 func (s *server) Stop() {
 	s.logger.Info("Gracefully stopping gRPC server")
 	s.server.GracefulStop()
 	s.logger.Info("gRPC server stopped")
 }
 
+// Init grpc server
 func (s *server) Init() {
 	grpcServer := grpc.NewServer()
 	s.server = grpcServer
+}
+
+// GetServer return server
+func (s *server) GetServer() *grpc.Server {
+	return s.server
 }

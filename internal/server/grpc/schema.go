@@ -7,10 +7,12 @@ import (
 	"google.golang.org/grpc"
 )
 
+// Server interface
 type Server interface {
 	Init()
 	Start(cancel context.CancelFunc)
 	Stop()
+	GetServer() *grpc.Server
 }
 
 type server struct {
@@ -19,6 +21,7 @@ type server struct {
 	logger *zap.Logger
 }
 
+// NewGrpcServer create grpc server
 func NewGrpcServer(logger *zap.Logger, cfg *config.Config) Server {
 	newServer := &server{
 		logger: logger,

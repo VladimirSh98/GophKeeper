@@ -4,6 +4,7 @@ import (
 	"context"
 )
 
+// GetUserByLogin get user by login
 func (repo *Repo) GetUserByLogin(ctx context.Context, login string, archived bool) (User, error) {
 	var record User
 	query := "SELECT * FROM \"user\" WHERE login = $1 and archived = $2"
@@ -15,6 +16,7 @@ func (repo *Repo) GetUserByLogin(ctx context.Context, login string, archived boo
 	return record, nil
 }
 
+// Create new user
 func (repo *Repo) Create(ctx context.Context, login string, password string) (int, error) {
 	query := "INSERT INTO \"user\" (login, hash, archived) VALUES ($1, $2, false) RETURNING id;"
 	var ID int

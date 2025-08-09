@@ -6,6 +6,8 @@ import (
 	"github.com/VladimirSh98/GophKeeper/internal/server/database"
 	grpcServer "github.com/VladimirSh98/GophKeeper/internal/server/grpc"
 	"github.com/VladimirSh98/GophKeeper/internal/server/logger"
+	userRepository "github.com/VladimirSh98/GophKeeper/internal/server/repository/user"
+	userGrpc "github.com/VladimirSh98/GophKeeper/internal/server/service/user"
 	"log"
 )
 
@@ -25,18 +27,26 @@ func NewApp(ctx context.Context) (*App, error) {
 	}
 	databaseConn := database.DBConnectionStruct{Cfg: cfg}
 	err = databaseConn.OpenConnection()
+	defer databaseConn.CloseConnection()
 	if err != nil {
 		log.Fatalf("Database connection failed: %v", err)
 		return nil, err
 	}
-	defer databaseConn.CloseConnection()
+	err = databaseConn.Ping()
+	if err != nil {
+		log.Fatalf("Database ping failed: %v", err)
+		return nil, err
+	}
 	err = databaseConn.UpgradeMigrations()
 	if err != nil {
 		log.Printf("Database migrations failed: %v", err)
 		return nil, err
 	}
-
 	newGrpcServer := grpcServer.NewGrpcServer(initLogger, cfg)
+
+	userRepo := userRepository.NewRepository(databaseConn.Conn)
+	userGrpcService := userGrpc.NewUserGrpc(userRepo)
+	userGrpcService.RegisterService(newGrpcServer.GetServer())
 	return &App{
 		Logger: initLogger,
 		Server: newGrpcServer,

@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 )
 
+// App struct
 type App struct {
 	DB     *sql.DB
 	Logger *zap.Logger
