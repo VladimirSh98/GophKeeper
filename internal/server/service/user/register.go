@@ -3,7 +3,7 @@ package user
 import (
 	"context"
 	"errors"
-	"github.com/VladimirSh98/GophKeeper/internal/server/middleware"
+	"github.com/VladimirSh98/GophKeeper/internal/server/utils"
 	pb "github.com/VladimirSh98/GophKeeper/proto"
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5/pgconn"
@@ -13,7 +13,7 @@ import (
 )
 
 func (s *Grpc) Register(ctx context.Context, req *pb.RegisterRequest) (*pb.RegisterResponse, error) {
-	hashPass, err := middleware.HashPassword(req.GetPassword())
+	hashPass, err := utils.HashPassword(req.GetPassword())
 	_, err = s.userRepo.Create(ctx, req.GetLogin(), hashPass)
 	var pgErr *pgconn.PgError
 	if errors.As(err, &pgErr) && pgerrcode.IsIntegrityConstraintViolation(pgErr.Code) {

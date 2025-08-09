@@ -1,54 +1,29 @@
 package middleware
 
 import (
-	"crypto/rand"
-	"crypto/sha256"
-	"encoding/base64"
-	"fmt"
-	"strings"
+	"errors"
+	"github.com/VladimirSh98/GophKeeper/internal/server/config"
+	"github.com/golang-jwt/jwt/v4"
 )
 
-const (
-	saltSize       = 16
-	hashIterations = 10
-)
-
-// GenerateSalt создает соль
-func GenerateSalt() (string, error) {
-	salt := make([]byte, saltSize)
-	_, err := rand.Read(salt)
-	if err != nil {
-		return "", err
-	}
-	return base64.URLEncoding.EncodeToString(salt), nil
+type userAuth struct {
+	jwt.RegisteredClaims
+	tokenString string
+	token       *jwt.Token
+	Login       string
+	cfg         config.Config
 }
 
-// HashPassword создает комбинированную строку: "соль:хеш"
-func HashPassword(password string) (string, error) {
-	salt, err := GenerateSalt()
+func (auth *userAuth) validate() error {
+	var err error
+	auth.token, err = jwt.ParseWithClaims(auth.tokenString, auth, func(t *jwt.Token) (interface{}, error) {
+		return []byte(auth.cfg.SecretKey), nil
+	})
 	if err != nil {
-		return "", fmt.Errorf("failed to generate salt: %v", err)
+		return err
 	}
-	hash := sha256.Sum256([]byte(password + salt))
-	for i := 0; i < hashIterations-1; i++ {
-		hash = sha256.Sum256(hash[:])
+	if !auth.token.Valid {
+		return errors.New("invalid token")
 	}
-	return fmt.Sprintf("%s:%x", salt, hash), nil
-}
-
-// VerifyPassword проверяет пароль
-func VerifyPassword(password string, combinedHash string) bool {
-	parts := strings.Split(combinedHash, ":")
-	if len(parts) != 2 {
-		return false
-	}
-	salt := parts[0]
-	storedHash := parts[1]
-
-	hash := sha256.Sum256([]byte(password + salt))
-	for i := 0; i < hashIterations-1; i++ {
-		hash = sha256.Sum256(hash[:])
-	}
-
-	return fmt.Sprintf("%x", hash) == storedHash
+	return nil
 }

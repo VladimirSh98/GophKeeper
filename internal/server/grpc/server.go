@@ -2,6 +2,7 @@ package grpc
 
 import (
 	"context"
+	"github.com/VladimirSh98/GophKeeper/internal/server/middleware"
 	"google.golang.org/grpc"
 	"net"
 )
@@ -30,7 +31,7 @@ func (s *server) Stop() {
 
 // Init grpc server
 func (s *server) Init() {
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(middleware.JWTUnaryInterceptor))
 	s.server = grpcServer
 }
 

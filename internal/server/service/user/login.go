@@ -2,7 +2,7 @@ package user
 
 import (
 	"context"
-	"github.com/VladimirSh98/GophKeeper/internal/server/middleware"
+	"github.com/VladimirSh98/GophKeeper/internal/server/utils"
 	pb "github.com/VladimirSh98/GophKeeper/proto"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
@@ -15,7 +15,7 @@ func (s *Grpc) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginRespon
 		s.logger.Warn("Login GetUserByLogin error", zap.Error(err))
 		return nil, status.Errorf(codes.Internal, "failed to get user from db")
 	}
-	if !middleware.VerifyPassword(req.Password, userModel.Hash) {
+	if !utils.VerifyPassword(req.Password, userModel.Hash) {
 		s.logger.Warn("Login GetUserByLogin error", zap.Error(err))
 		return nil, status.Errorf(codes.Unauthenticated, "invalid credentials")
 	}
