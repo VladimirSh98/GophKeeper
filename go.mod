@@ -3,13 +3,13 @@ module github.com/VladimirSh98/GophKeeper
 go 1.24.4
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/caarlos0/env/v6 v6.10.1
 	github.com/jackc/pgx/v5 v5.7.5
 	github.com/pressly/goose/v3 v3.18.0
 	github.com/stretchr/testify v1.10.0
 	go.uber.org/zap v1.27.0
 	google.golang.org/grpc v1.59.0
-	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -33,4 +33,5 @@ require (
 	golang.org/x/tools v0.30.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20231106174013-bbf56f31fb17 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
