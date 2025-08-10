@@ -9,6 +9,7 @@ import (
 	secretRepository "github.com/VladimirSh98/GophKeeper/internal/server/repository/secret"
 	userRepository "github.com/VladimirSh98/GophKeeper/internal/server/repository/user"
 	authService "github.com/VladimirSh98/GophKeeper/internal/server/service/auth"
+	secretGrpc "github.com/VladimirSh98/GophKeeper/internal/server/service/secret"
 	userGrpc "github.com/VladimirSh98/GophKeeper/internal/server/service/user"
 	"log"
 )
@@ -50,6 +51,9 @@ func NewApp(ctx context.Context) (*App, error) {
 	auth := authService.NewService(cfg)
 	userGrpcService := userGrpc.NewUserGrpc(userRepo, secretRepo, auth, initLogger)
 	userGrpcService.RegisterService(newGrpcServer.GetServer())
+	secretGrpcService := secretGrpc.NewUserGrpc(userRepo, secretRepo, initLogger)
+	secretGrpcService.RegisterService(newGrpcServer.GetServer())
+
 	return &App{
 		Logger: initLogger,
 		Server: newGrpcServer,
