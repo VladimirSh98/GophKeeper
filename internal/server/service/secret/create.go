@@ -2,6 +2,7 @@ package secret
 
 import (
 	"context"
+	"encoding/json"
 	secretRepo "github.com/VladimirSh98/GophKeeper/internal/server/repository/secret"
 	"github.com/VladimirSh98/GophKeeper/internal/server/utils"
 	pb "github.com/VladimirSh98/GophKeeper/proto"
@@ -17,9 +18,19 @@ func (s *Grpc) Create(ctx context.Context, req *pb.CreateSecretRequest) (*pb.Sec
 		return nil, status.Error(codes.PermissionDenied, "user not found")
 	}
 	var secret secretRepo.Secret
-	secret, err = s.secretRepo.Create(ctx, user.ID, int(req.DataType), req.Content, req.Metadata)
+	var bytesMetadata []byte
+	bytesMetadata, err = json.Marshal(req.Metadata)
+	if err != nil {
+		return nil, status.Error(codes.Internal, "secret metadata marshal failed")
+	}
+	secret, err = s.secretRepo.Create(ctx, user.ID, int(req.DataType), req.Content, bytesMetadata)
 	if err != nil {
 		return nil, status.Error(codes.Internal, "secret creation failed")
+	}
+	var metadata map[string]string
+	err = json.Unmarshal(secret.Metadata, &metadata)
+	if err != nil {
+		return nil, status.Error(codes.Internal, "secret metadata unmarshal failed")
 	}
 	return &pb.SecretModel{
 		Id:        int64(secret.ID),
@@ -29,6 +40,6 @@ func (s *Grpc) Create(ctx context.Context, req *pb.CreateSecretRequest) (*pb.Sec
 		UpdatedAt: timestamppb.New(secret.UpdatedAt),
 		DataType:  pb.DataType(secret.DataType),
 		Content:   secret.Content,
-		Metadata:  secret.Metadata,
+		Metadata:  metadata,
 	}, nil
 }
