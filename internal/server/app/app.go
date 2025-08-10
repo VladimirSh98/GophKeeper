@@ -6,6 +6,7 @@ import (
 	"github.com/VladimirSh98/GophKeeper/internal/server/database"
 	grpcServer "github.com/VladimirSh98/GophKeeper/internal/server/grpc"
 	"github.com/VladimirSh98/GophKeeper/internal/server/logger"
+	secretRepository "github.com/VladimirSh98/GophKeeper/internal/server/repository/secret"
 	userRepository "github.com/VladimirSh98/GophKeeper/internal/server/repository/user"
 	authService "github.com/VladimirSh98/GophKeeper/internal/server/service/auth"
 	userGrpc "github.com/VladimirSh98/GophKeeper/internal/server/service/user"
@@ -45,8 +46,9 @@ func NewApp(ctx context.Context) (*App, error) {
 	newGrpcServer := grpcServer.NewGrpcServer(initLogger, cfg)
 
 	userRepo := userRepository.NewRepository(databaseConn.Conn)
+	secretRepo := secretRepository.NewRepository(databaseConn.Conn)
 	auth := authService.NewService(cfg)
-	userGrpcService := userGrpc.NewUserGrpc(userRepo, auth, initLogger)
+	userGrpcService := userGrpc.NewUserGrpc(userRepo, secretRepo, auth, initLogger)
 	userGrpcService.RegisterService(newGrpcServer.GetServer())
 	return &App{
 		Logger: initLogger,

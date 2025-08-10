@@ -9,6 +9,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+// Login user
 func (s *Grpc) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
 	userModel, err := s.userRepo.GetUserByLogin(ctx, req.Login, false)
 	if err != nil {

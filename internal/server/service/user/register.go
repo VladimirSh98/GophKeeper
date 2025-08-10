@@ -12,6 +12,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+// Register user
 func (s *Grpc) Register(ctx context.Context, req *pb.RegisterRequest) (*pb.RegisterResponse, error) {
 	hashPass, err := utils.HashPassword(req.GetPassword())
 	_, err = s.userRepo.Create(ctx, req.GetLogin(), hashPass)

@@ -17,6 +17,7 @@ type Service interface {
 	CreateToken(login string) (string, error)
 }
 
+// NewService create new service
 func NewService(cfg *config.Config) Service {
 	return &auth{cfg: cfg}
 }
