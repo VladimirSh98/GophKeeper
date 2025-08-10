@@ -67,7 +67,7 @@ func (repo *Repo) DeleteByLogin(
 	login string,
 ) error {
 	query := "UPDATE \"secrets\" s SET archived = $1 FROM \"user\" u  WHERE u.id = s.user_id AND u.login = $2"
-	_, err := repo.Conn.ExecContext(ctx, query, false, login)
+	_, err := repo.Conn.ExecContext(ctx, query, true, login)
 	if err != nil {
 		return err
 	}

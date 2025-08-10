@@ -10,7 +10,7 @@ import (
 
 // Grpc secret
 type Grpc struct {
-	pb.UnimplementedUserServer
+	pb.UnimplementedSecretServer
 	userRepo   user.Repository
 	secretRepo secret.Repository
 	logger     *zap.Logger
@@ -23,5 +23,5 @@ func NewUserGrpc(userRepo user.Repository, secretRepo secret.Repository, logger 
 
 // RegisterService register service
 func (s *Grpc) RegisterService(r grpc.ServiceRegistrar) {
-	pb.RegisterUserServer(r, s)
+	pb.RegisterSecretServer(r, s)
 }
