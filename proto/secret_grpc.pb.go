@@ -20,7 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	Secret_Create_FullMethodName = "/proto.Secret/Create"
-	Secret_Edit_FullMethodName   = "/proto.Secret/Edit"
+	Secret_Update_FullMethodName = "/proto.Secret/Update"
 	Secret_Delete_FullMethodName = "/proto.Secret/Delete"
 	Secret_Get_FullMethodName    = "/proto.Secret/Get"
 )
@@ -30,7 +30,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SecretClient interface {
 	Create(ctx context.Context, in *CreateSecretRequest, opts ...grpc.CallOption) (*SecretModel, error)
-	Edit(ctx context.Context, in *EditSecretRequest, opts ...grpc.CallOption) (*SecretModel, error)
+	Update(ctx context.Context, in *EditSecretRequest, opts ...grpc.CallOption) (*SecretModel, error)
 	Delete(ctx context.Context, in *DeleteSecretRequest, opts ...grpc.CallOption) (*SecretModel, error)
 	Get(ctx context.Context, in *GetSecretsRequest, opts ...grpc.CallOption) (*GetSecretsResponse, error)
 }
@@ -52,9 +52,9 @@ func (c *secretClient) Create(ctx context.Context, in *CreateSecretRequest, opts
 	return out, nil
 }
 
-func (c *secretClient) Edit(ctx context.Context, in *EditSecretRequest, opts ...grpc.CallOption) (*SecretModel, error) {
+func (c *secretClient) Update(ctx context.Context, in *EditSecretRequest, opts ...grpc.CallOption) (*SecretModel, error) {
 	out := new(SecretModel)
-	err := c.cc.Invoke(ctx, Secret_Edit_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, Secret_Update_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +84,7 @@ func (c *secretClient) Get(ctx context.Context, in *GetSecretsRequest, opts ...g
 // for forward compatibility
 type SecretServer interface {
 	Create(context.Context, *CreateSecretRequest) (*SecretModel, error)
-	Edit(context.Context, *EditSecretRequest) (*SecretModel, error)
+	Update(context.Context, *EditSecretRequest) (*SecretModel, error)
 	Delete(context.Context, *DeleteSecretRequest) (*SecretModel, error)
 	Get(context.Context, *GetSecretsRequest) (*GetSecretsResponse, error)
 	mustEmbedUnimplementedSecretServer()
@@ -97,8 +97,8 @@ type UnimplementedSecretServer struct {
 func (UnimplementedSecretServer) Create(context.Context, *CreateSecretRequest) (*SecretModel, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedSecretServer) Edit(context.Context, *EditSecretRequest) (*SecretModel, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Edit not implemented")
+func (UnimplementedSecretServer) Update(context.Context, *EditSecretRequest) (*SecretModel, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedSecretServer) Delete(context.Context, *DeleteSecretRequest) (*SecretModel, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
@@ -137,20 +137,20 @@ func _Secret_Create_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Secret_Edit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Secret_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(EditSecretRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SecretServer).Edit(ctx, in)
+		return srv.(SecretServer).Update(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Secret_Edit_FullMethodName,
+		FullMethod: Secret_Update_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SecretServer).Edit(ctx, req.(*EditSecretRequest))
+		return srv.(SecretServer).Update(ctx, req.(*EditSecretRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -203,8 +203,8 @@ var Secret_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Secret_Create_Handler,
 		},
 		{
-			MethodName: "Edit",
-			Handler:    _Secret_Edit_Handler,
+			MethodName: "Update",
+			Handler:    _Secret_Update_Handler,
 		},
 		{
 			MethodName: "Delete",

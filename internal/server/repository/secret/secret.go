@@ -47,14 +47,14 @@ func (repo *Repo) GetSecretsByUser(ctx context.Context, login string) ([]Secret,
 // UpdateByID update secret by ID
 func (repo *Repo) UpdateByID(
 	ctx context.Context,
+	login string,
 	secretID int,
 	content []byte,
 	metadata []byte,
-	archived bool,
 ) (Secret, error) {
 	var secret Secret
-	query := "UPDATE \"secrets\" SET content = $1, metadata = $2, archived = $3 WHERE id = $4  RETURNING id, user_id, archived, created_at, updated_at, data_type, content, metadata;"
-	err := repo.Conn.QueryRowContext(ctx, query, content, metadata, archived, secretID).Scan(&secret.ID, &secret.UserID, &secret.Archived, &secret.CreatedAt, &secret.UpdatedAt, &secret.DataType, &secret.Content, &secret.Metadata)
+	query := "UPDATE \"secrets\" s SET content = $1, metadata = $2 FROM \"user\" u WHERE s.id = $3 AND u.login = $4 AND s.user_id = u.id RETURNING s.id, s.user_id, s.archived, s.created_at, s.updated_at, s.data_type, s.content, s.metadata;"
+	err := repo.Conn.QueryRowContext(ctx, query, content, metadata, secretID, login).Scan(&secret.ID, &secret.UserID, &secret.Archived, &secret.CreatedAt, &secret.UpdatedAt, &secret.DataType, &secret.Content, &secret.Metadata)
 	if err != nil {
 		return secret, err
 	}
@@ -72,4 +72,19 @@ func (repo *Repo) DeleteByLogin(
 		return err
 	}
 	return nil
+}
+
+// DeleteByID delete secret by ID
+func (repo *Repo) DeleteByID(
+	ctx context.Context,
+	login string,
+	secretID int,
+) (Secret, error) {
+	var secret Secret
+	query := "UPDATE \"secrets\" s SET archived = true FROM \"user\" u WHERE s.id = $1 AND u.login = $2 AND s.user_id = u.id RETURNING s.id, s.user_id, s.archived, s.created_at, s.updated_at, s.data_type, s.content, s.metadata;"
+	err := repo.Conn.QueryRowContext(ctx, query, secretID, login).Scan(&secret.ID, &secret.UserID, &secret.Archived, &secret.CreatedAt, &secret.UpdatedAt, &secret.DataType, &secret.Content, &secret.Metadata)
+	if err != nil {
+		return secret, err
+	}
+	return secret, nil
 }

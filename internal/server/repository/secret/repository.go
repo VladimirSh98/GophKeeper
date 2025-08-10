@@ -22,12 +22,13 @@ type Repository interface {
 	GetSecretsByUser(ctx context.Context, login string) ([]Secret, error)
 	UpdateByID(
 		ctx context.Context,
+		login string,
 		secretID int,
 		content []byte,
 		metadata []byte,
-		archived bool,
 	) (Secret, error)
 	DeleteByLogin(ctx context.Context, login string) error
+	DeleteByID(ctx context.Context, login string, secretID int) (Secret, error)
 }
 
 // NewRepository create new repository
