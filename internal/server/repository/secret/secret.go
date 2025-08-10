@@ -23,7 +23,7 @@ func (repo *Repo) Create(
 // GetSecretsByUser get not archived secrets by user
 func (repo *Repo) GetSecretsByUser(ctx context.Context, login string) ([]Secret, error) {
 	secrets := make([]Secret, 0)
-	query := "SELECT * FROM \"secrets\" s JOIN \"user\" u on u.id = s.user_id WHERE u.login = $1 and s.archived = $2;"
+	query := "SELECT s.* FROM \"secrets\" s JOIN \"user\" u on u.id = s.user_id WHERE u.login = $1 and s.archived = $2;"
 	rows, err := repo.Conn.QueryContext(ctx, query, login, false)
 	if err != nil {
 		return secrets, err
