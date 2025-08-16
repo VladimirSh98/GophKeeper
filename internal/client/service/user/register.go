@@ -15,16 +15,16 @@ func (s *Service) Register(cmd *cobra.Command, args []string) {
 	password, _ := cmd.Flags().GetString("password")
 	response, err := s.userClient.Register(ctx, login, password)
 	if utils.IsExpectedError(err, []codes.Code{codes.FailedPrecondition}) {
-		utils.MessageWithoutArgs("Пользователь с таким именем уже существует", color.FgHiYellow)
+		utils.ColorMessage("Пользователь с таким именем уже существует", color.FgHiYellow)
 		return
 	} else if err != nil {
-		utils.MessageWithoutArgs("Произошла непредвиденная ошибка", color.FgHiRed)
+		utils.ColorMessage("Произошла непредвиденная ошибка", color.FgHiRed)
 		return
 	}
 	err = s.tokenManager.SaveToken(response.Token)
 	if err != nil {
-		utils.MessageWithoutArgs("Произошла непредвиденная ошибка", color.FgHiRed)
+		utils.ColorMessage("Произошла непредвиденная ошибка", color.FgHiRed)
 		return
 	}
-	utils.MessageWithArgs("Пользователь с логином %s успешно создан!", color.FgHiGreen, login)
+	utils.ColorMessage("Пользователь с логином %s успешно создан!", color.FgHiGreen, login)
 }

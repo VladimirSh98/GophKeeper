@@ -6,6 +6,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
+// ServerConnection struct
 type ServerConnection struct {
 	Conn *grpc.ClientConn
 	Cfg  *config.Config

@@ -2,7 +2,7 @@ package user
 
 import "github.com/spf13/cobra"
 
-// DeleteCmd delete user
+// DeleteCmd delete user command
 func (h *Handler) DeleteCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "delete user",
