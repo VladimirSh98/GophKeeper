@@ -17,6 +17,7 @@ type Service struct {
 // ServiceInterface service interface
 type ServiceInterface interface {
 	Delete(cmd *cobra.Command, args []string)
+	Get(cmd *cobra.Command, args []string)
 }
 
 // NewService create new service

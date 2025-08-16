@@ -51,6 +51,7 @@ func Run() (App, error) {
 	rootCmd.AddCommand(userHandler.LoginCmd())
 	rootCmd.AddCommand(userHandler.DeleteCmd())
 	rootCmd.AddCommand(secretHandler.DeleteCmd())
+	rootCmd.AddCommand(secretHandler.GetCmd())
 	return App{
 		Logger:      initLogger,
 		Client:      serverConn,

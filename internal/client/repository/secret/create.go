@@ -3,6 +3,7 @@ package secret
 import (
 	"context"
 	pb "github.com/VladimirSh98/GophKeeper/proto"
+	metadataGrpc "google.golang.org/grpc/metadata"
 )
 
 func (c *Client) Create(
@@ -12,7 +13,7 @@ func (c *Client) Create(
 	content []byte,
 	metadata map[string]string,
 ) (*pb.SecretModel, error) {
-	ctx = metadata.AppendToOutgoingContext(ctx, "authorization", token)
+	ctx = metadataGrpc.AppendToOutgoingContext(ctx, "authorization", token)
 	response, err := c.client.Create(ctx, &pb.CreateSecretRequest{
 		DataType: pb.DataType(dataType),
 		Content:  content,

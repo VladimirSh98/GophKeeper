@@ -13,6 +13,7 @@ type Handler struct {
 // HandlerInterface handler interface
 type HandlerInterface interface {
 	DeleteCmd() *cobra.Command
+	GetCmd() *cobra.Command
 }
 
 // NewHandler new user handler

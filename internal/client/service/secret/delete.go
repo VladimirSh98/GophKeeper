@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// Delete secret
 func (s *Service) Delete(cmd *cobra.Command, args []string) {
 	ctx := context.Background()
 	token, err := s.tokenManager.GetToken()
