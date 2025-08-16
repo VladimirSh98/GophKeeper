@@ -12,7 +12,7 @@ func (c *Client) Register(ctx context.Context, login string, password string) (*
 		Password: password,
 	})
 	if err != nil {
-		c.logger.Sugar().Warnf("Register error: %s", err.Error())
+		c.logger.Sugar().Debugf("Register error: %s", err.Error())
 		return nil, err
 	}
 	return response, nil

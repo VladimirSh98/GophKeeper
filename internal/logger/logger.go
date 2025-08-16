@@ -11,7 +11,5 @@ func Initialize() (*zap.Logger, error) {
 		return nil, err
 	}
 	zap.ReplaceGlobals(logger)
-	sugar := *logger.Sugar()
-	sugar.Infow("Logger initialized")
 	return logger, nil
 }

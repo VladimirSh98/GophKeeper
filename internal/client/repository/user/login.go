@@ -11,7 +11,7 @@ func (c *Client) Login(ctx context.Context, login string, password string) (*pb.
 		Password: password,
 	})
 	if err != nil {
-		c.logger.Sugar().Warnf("Login error: %s", err.Error())
+		c.logger.Sugar().Debugf("Login error: %s", err.Error())
 		return nil, err
 	}
 	return response, nil

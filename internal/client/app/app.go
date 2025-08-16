@@ -4,6 +4,7 @@ import (
 	"github.com/VladimirSh98/GophKeeper/internal/client/config"
 	"github.com/VladimirSh98/GophKeeper/internal/client/connection"
 	userHandlerRepo "github.com/VladimirSh98/GophKeeper/internal/client/handler/user"
+	"github.com/VladimirSh98/GophKeeper/internal/client/repository/memory"
 	userClientRepo "github.com/VladimirSh98/GophKeeper/internal/client/repository/user"
 	userServiceRepo "github.com/VladimirSh98/GophKeeper/internal/client/service/user"
 	"github.com/VladimirSh98/GophKeeper/internal/logger"
@@ -37,12 +38,17 @@ func Run() (App, error) {
 		return App{}, err
 	}
 	userClient := userClientRepo.NewClient(serverConn.Conn, initLogger)
-	userSevice := userServiceRepo.NewService(userClient, initLogger)
+	tokenManager := memory.NewManager(cfg.SecretKey)
+	userSevice := userServiceRepo.NewService(userClient, tokenManager, initLogger)
 	userHandler := userHandlerRepo.NewHandler(userSevice)
 	rootCmd.AddCommand(userHandler.RegisterCmd())
 	rootCmd.AddCommand(userHandler.LoginCmd())
 	rootCmd.AddCommand(userHandler.DeleteCmd())
-	return App{}, nil
+	return App{
+		Logger:      initLogger,
+		Client:      serverConn,
+		RootCommand: rootCmd,
+	}, nil
 }
 
 // go build -o myapp ./cmd/client

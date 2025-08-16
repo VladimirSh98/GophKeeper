@@ -13,7 +13,7 @@ func main() {
 	defer cancel()
 	application, err := app.NewApp()
 	if err != nil {
-		log.Println("Server failed to start: %v", err)
+		log.Printf("Server failed to start: %v\n", err)
 	}
 	application.Server.Start(cancel)
 	<-ctx.Done()

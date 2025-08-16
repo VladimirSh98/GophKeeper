@@ -1,26 +1,19 @@
 package main
 
 import (
-	"context"
 	"github.com/VladimirSh98/GophKeeper/internal/client/app"
 	"log"
-	"os/signal"
-	"syscall"
 )
 
 func main() {
-	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
-	defer cancel()
 	application, err := app.Run()
 	if err != nil {
-		log.Println("Client failed to start: %v", err)
+		log.Printf("Client failed to start: %v\n", err)
 	}
-	err = application.RootCommand.ExecuteContext(ctx)
+	defer application.Client.CloseConnection()
+	err = application.RootCommand.Execute()
 	if err != nil {
-		log.Println("Client failed to start: %v", err)
+		log.Printf("Client failed to command: %v\n", err)
 		return
 	}
-	<-ctx.Done()
-	application.Client.CloseConnection()
-	application.Logger.Info("Application stopped")
 }

@@ -7,10 +7,10 @@ import (
 )
 
 func (c *Client) Delete(ctx context.Context, token string) (*pb.DeleteResponse, error) {
-	metadata.AppendToOutgoingContext(ctx, "authorization", token)
+	ctx = metadata.AppendToOutgoingContext(ctx, "authorization", token)
 	response, err := c.client.Delete(ctx, &pb.DeleteRequest{})
 	if err != nil {
-		c.logger.Sugar().Warnf("Delete error: %s", err.Error())
+		c.logger.Sugar().Debugf("Delete error: %s", err.Error())
 		return nil, err
 	}
 	return response, nil
