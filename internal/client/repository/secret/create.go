@@ -1,0 +1,24 @@
+package secret
+
+import (
+	"context"
+	pb "github.com/VladimirSh98/GophKeeper/proto"
+)
+
+func (c *Client) Create(
+	ctx context.Context,
+	dataType DataType,
+	content []byte,
+	metadata map[string]string,
+) (*pb.SecretModel, error) {
+	response, err := c.client.Create(ctx, &pb.CreateSecretRequest{
+		DataType: pb.DataType(dataType),
+		Content:  content,
+		Metadata: metadata,
+	})
+	if err != nil {
+		c.logger.Sugar().Debugf("Failed to create secret model: %s", err.Error())
+		return nil, err
+	}
+	return response, nil
+}
