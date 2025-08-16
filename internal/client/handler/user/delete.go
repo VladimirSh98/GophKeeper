@@ -7,8 +7,6 @@ func (h *Handler) DeleteCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "delete user",
 		Short: "Удаление пользователя",
-		Run: func(cmd *cobra.Command, args []string) {
-			println("Пользователь удален!")
-		},
+		Run:   h.userService.Delete,
 	}
 }

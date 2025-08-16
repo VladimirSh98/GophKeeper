@@ -7,8 +7,6 @@ func (h *Handler) LoginCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "login",
 		Short: "Авторизация пользователя",
-		Run: func(cmd *cobra.Command, args []string) {
-			println("Пользователь авторизован!")
-		},
+		Run:   h.userService.Login,
 	}
 }

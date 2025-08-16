@@ -3,6 +3,7 @@ package connection
 import (
 	"github.com/VladimirSh98/GophKeeper/internal/client/config"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 type ServerConnection struct {
@@ -13,7 +14,7 @@ type ServerConnection struct {
 // OpenConnection open client connection
 func (server *ServerConnection) OpenConnection() error {
 	var err error
-	server.Conn, err = grpc.Dial(server.Cfg.ServerAddress)
+	server.Conn, err = grpc.Dial(server.Cfg.ServerAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return err
 	}

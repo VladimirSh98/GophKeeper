@@ -36,8 +36,8 @@ func Run() (App, error) {
 		log.Fatalf("Database connection failed: %v", err)
 		return App{}, err
 	}
-	userClient := userClientRepo.NewClient(serverConn.Conn)
-	userSevice := userServiceRepo.NewService(userClient)
+	userClient := userClientRepo.NewClient(serverConn.Conn, initLogger)
+	userSevice := userServiceRepo.NewService(userClient, initLogger)
 	userHandler := userHandlerRepo.NewHandler(userSevice)
 	rootCmd.AddCommand(userHandler.RegisterCmd())
 	rootCmd.AddCommand(userHandler.LoginCmd())
