@@ -1,9 +1,14 @@
 package app
 
 import (
-	"github.com/VladimirSh98/GophKeeper/internal/client/commands/user"
+	"github.com/VladimirSh98/GophKeeper/internal/client/config"
+	"github.com/VladimirSh98/GophKeeper/internal/client/connection"
+	userHandlerRepo "github.com/VladimirSh98/GophKeeper/internal/client/handler/user"
+	userClientRepo "github.com/VladimirSh98/GophKeeper/internal/client/repository/user"
+	userServiceRepo "github.com/VladimirSh98/GophKeeper/internal/client/service/user"
+	"github.com/VladimirSh98/GophKeeper/internal/logger"
 	"github.com/spf13/cobra"
-	"os"
+	"log"
 )
 
 var rootCmd = &cobra.Command{
@@ -11,14 +16,33 @@ var rootCmd = &cobra.Command{
 	Long: `Программа для сохранения различных данных через командную строку`,
 }
 
-// Execute init cli
-func Execute() {
-	rootCmd.AddCommand(user.RegisterCmd())
-	rootCmd.AddCommand(user.LoginCmd())
-	rootCmd.AddCommand(user.DeleteCmd())
-	if err := rootCmd.Execute(); err != nil {
-		os.Exit(1)
+// Run create cli app
+func Run() (App, error) {
+	initLogger, err := logger.Initialize()
+	defer initLogger.Sync()
+	if err != nil {
+		log.Fatalf("Logger configuration failed: %v", err)
+		return App{}, err
 	}
+	cfg := &config.Config{}
+	err = config.LoadConfig(cfg)
+	if err != nil {
+		log.Fatalf("Client configuration failed: %v", err)
+		return App{}, err
+	}
+	serverConn := connection.ServerConnection{Cfg: cfg}
+	err = serverConn.OpenConnection()
+	if err != nil {
+		log.Fatalf("Database connection failed: %v", err)
+		return App{}, err
+	}
+	userClient := userClientRepo.NewClient(serverConn.Conn)
+	userSevice := userServiceRepo.NewService(userClient)
+	userHandler := userHandlerRepo.NewHandler(userSevice)
+	rootCmd.AddCommand(userHandler.RegisterCmd())
+	rootCmd.AddCommand(userHandler.LoginCmd())
+	rootCmd.AddCommand(userHandler.DeleteCmd())
+	return App{}, nil
 }
 
 // go build -o myapp ./cmd/client

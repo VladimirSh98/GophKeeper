@@ -4,7 +4,7 @@ import (
 	"github.com/caarlos0/env/v6"
 )
 
-// LoadConfig loads the server configuration
+// LoadConfig loads the client configuration
 func LoadConfig(cfg *Config) error {
 	var err error
 

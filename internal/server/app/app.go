@@ -1,11 +1,10 @@
 package app
 
 import (
-	"context"
+	"github.com/VladimirSh98/GophKeeper/internal/logger"
 	"github.com/VladimirSh98/GophKeeper/internal/server/config"
 	"github.com/VladimirSh98/GophKeeper/internal/server/database"
 	grpcServer "github.com/VladimirSh98/GophKeeper/internal/server/grpc"
-	"github.com/VladimirSh98/GophKeeper/internal/server/logger"
 	secretRepository "github.com/VladimirSh98/GophKeeper/internal/server/repository/secret"
 	userRepository "github.com/VladimirSh98/GophKeeper/internal/server/repository/user"
 	authService "github.com/VladimirSh98/GophKeeper/internal/server/service/auth"
@@ -15,7 +14,7 @@ import (
 )
 
 // NewApp create app
-func NewApp(ctx context.Context) (*App, error) {
+func NewApp() (*App, error) {
 	initLogger, err := logger.Initialize()
 	defer initLogger.Sync()
 	if err != nil {

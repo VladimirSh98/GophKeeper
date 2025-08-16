@@ -11,7 +11,7 @@ import (
 func main() {
 	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 	defer cancel()
-	application, err := app.NewApp(ctx)
+	application, err := app.NewApp()
 	if err != nil {
 		log.Println("Server failed to start: %v", err)
 	}
