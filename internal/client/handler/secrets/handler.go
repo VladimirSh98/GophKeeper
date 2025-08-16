@@ -15,6 +15,7 @@ type HandlerInterface interface {
 	DeleteCmd() *cobra.Command
 	GetCmd() *cobra.Command
 	CreateTextCmd() *cobra.Command
+	CreateBinaryCmd() *cobra.Command
 }
 
 // NewHandler new user handler
