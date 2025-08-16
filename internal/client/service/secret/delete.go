@@ -19,10 +19,12 @@ func (s *Service) Delete(cmd *cobra.Command, args []string) {
 		utils.ColorMessage("Для удаления аккаунта необходимо авторизоваться", color.FgHiYellow)
 		return
 	}
-	secretID, _ := cmd.Flags().GetInt64("secret")
-	_, err = s.secretClient.Delete(ctx, token, int(secretID))
+	secretID, _ := cmd.Flags().GetInt("secret")
+	println(secretID)
+	_, err = s.secretClient.Delete(ctx, token, secretID)
 	if err != nil {
 		utils.ColorMessage("Произошла непредвиденная ошибка", color.FgHiRed)
 		return
 	}
+	utils.ColorMessage("Секрет удален", color.FgHiGreen)
 }
