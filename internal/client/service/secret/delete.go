@@ -20,7 +20,6 @@ func (s *Service) Delete(cmd *cobra.Command, args []string) {
 		return
 	}
 	secretID, _ := cmd.Flags().GetInt("secret")
-	println(secretID)
 	_, err = s.secretClient.Delete(ctx, token, secretID)
 	if err != nil {
 		utils.ColorMessage("Произошла непредвиденная ошибка", color.FgHiRed)

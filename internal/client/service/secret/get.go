@@ -37,7 +37,6 @@ func printResponse(response *pb.GetSecretsResponse) {
 	for _, secret := range response.GetSecrets() {
 		record, err := parseSecret(secret)
 		if err != nil {
-			println(err.Error())
 			continue
 		}
 		var out []byte
@@ -46,8 +45,7 @@ func printResponse(response *pb.GetSecretsResponse) {
 			Indent:    "  ",
 		}.Marshal(record)
 		if err != nil {
-			fmt.Println("Ошибка при маршалинге:", err)
-			return
+			continue
 		}
 		utils.ColorMessage("Номер секрета: %s", color.FgHiBlue, fmt.Sprintf("%d", secret.Id))
 		utils.ColorMessage("Секрет: %s", color.FgHiBlue, string(out))
