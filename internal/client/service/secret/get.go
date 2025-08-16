@@ -29,7 +29,7 @@ func (s *Service) Get(cmd *cobra.Command, args []string) {
 		utils.ColorMessage("Произошла непредвиденная ошибка", color.FgHiRed)
 		return
 	}
-	utils.ColorMessage("Твои секретики", color.FgHiGreen)
+	utils.ColorMessage("Твои секретики:", color.FgHiGreen)
 	printResponse(response)
 }
 
@@ -49,10 +49,11 @@ func printResponse(response *pb.GetSecretsResponse) {
 			fmt.Println("Ошибка при маршалинге:", err)
 			return
 		}
-		utils.ColorMessage("---", color.FgHiWhite)
-		utils.ColorMessage("Номер секрета: %s", color.FgHiBlue, secret.Id)
+		utils.ColorMessage("Номер секрета: %s", color.FgHiBlue, fmt.Sprintf("%d", secret.Id))
 		utils.ColorMessage("Секрет: %s", color.FgHiBlue, string(out))
-		utils.ColorMessage("Дополнительные данные секрета: %s", color.FgHiBlue, secret.Metadata)
+		if len(secret.Metadata) > 0 {
+			utils.ColorMessage("Дополнительные данные секрета: %s", color.FgHiBlue, secret.Metadata)
+		}
 		utils.ColorMessage("---", color.FgHiWhite)
 	}
 }
