@@ -24,16 +24,18 @@ type Client struct {
 
 // ClientInterface client interface
 type ClientInterface interface {
-	Delete(ctx context.Context, secretID int) (*pb.SecretModel, error)
+	Delete(ctx context.Context, token string, secretID int) (*pb.SecretModel, error)
 	Create(
 		ctx context.Context,
+		token string,
 		dataType DataType,
 		content []byte,
 		metadata map[string]string,
 	) (*pb.SecretModel, error)
-	Get(ctx context.Context) (*pb.GetSecretsResponse, error)
+	Get(ctx context.Context, token string) (*pb.GetSecretsResponse, error)
 	Update(
 		ctx context.Context,
+		token string,
 		secretID int,
 		content []byte,
 		metadata map[string]string,

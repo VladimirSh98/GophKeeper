@@ -3,9 +3,12 @@ package app
 import (
 	"github.com/VladimirSh98/GophKeeper/internal/client/config"
 	"github.com/VladimirSh98/GophKeeper/internal/client/connection"
+	secretHandlerRepo "github.com/VladimirSh98/GophKeeper/internal/client/handler/secrets"
 	userHandlerRepo "github.com/VladimirSh98/GophKeeper/internal/client/handler/user"
 	"github.com/VladimirSh98/GophKeeper/internal/client/repository/memory"
+	secretClientRepo "github.com/VladimirSh98/GophKeeper/internal/client/repository/secret"
 	userClientRepo "github.com/VladimirSh98/GophKeeper/internal/client/repository/user"
+	secretServiceRepo "github.com/VladimirSh98/GophKeeper/internal/client/service/secret"
 	userServiceRepo "github.com/VladimirSh98/GophKeeper/internal/client/service/user"
 	"github.com/VladimirSh98/GophKeeper/internal/logger"
 	"github.com/spf13/cobra"
@@ -37,13 +40,17 @@ func Run() (App, error) {
 		log.Fatalf("Database connection failed: %v", err)
 		return App{}, err
 	}
-	userClient := userClientRepo.NewClient(serverConn.Conn, initLogger)
 	tokenManager := memory.NewManager(cfg.SecretKey)
+	userClient := userClientRepo.NewClient(serverConn.Conn, initLogger)
+	secretClient := secretClientRepo.NewClient(serverConn.Conn, initLogger)
 	userSevice := userServiceRepo.NewService(userClient, tokenManager, initLogger)
+	secretService := secretServiceRepo.NewService(secretClient, tokenManager, initLogger)
 	userHandler := userHandlerRepo.NewHandler(userSevice)
+	secretHandler := secretHandlerRepo.NewHandler(secretService)
 	rootCmd.AddCommand(userHandler.RegisterCmd())
 	rootCmd.AddCommand(userHandler.LoginCmd())
 	rootCmd.AddCommand(userHandler.DeleteCmd())
+	rootCmd.AddCommand(secretHandler.DeleteCmd())
 	return App{
 		Logger:      initLogger,
 		Client:      serverConn,

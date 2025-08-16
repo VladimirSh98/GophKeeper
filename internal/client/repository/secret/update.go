@@ -7,6 +7,7 @@ import (
 
 func (c *Client) Update(
 	ctx context.Context,
+	token string,
 	secretID int,
 	content []byte,
 	metadata map[string]string,

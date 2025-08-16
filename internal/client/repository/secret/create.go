@@ -7,10 +7,12 @@ import (
 
 func (c *Client) Create(
 	ctx context.Context,
+	token string,
 	dataType DataType,
 	content []byte,
 	metadata map[string]string,
 ) (*pb.SecretModel, error) {
+	ctx = metadata.AppendToOutgoingContext(ctx, "authorization", token)
 	response, err := c.client.Create(ctx, &pb.CreateSecretRequest{
 		DataType: pb.DataType(dataType),
 		Content:  content,
