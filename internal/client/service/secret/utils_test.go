@@ -86,7 +86,6 @@ func TestFormatMetadata(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			res := formatMetadata(tt.md)
-			// Поскольку порядок в map не гарантирован, проверим наличие подстрок
 			if len(tt.md) > 0 {
 				for k, v := range tt.md {
 					require.Contains(t, res, k+"="+v)

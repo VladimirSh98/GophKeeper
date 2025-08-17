@@ -17,7 +17,7 @@ const (
 	hashIterations = 10
 )
 
-// GenerateSalt создает соль
+// GenerateSalt create salt
 func GenerateSalt() (string, error) {
 	salt := make([]byte, saltSize)
 	_, err := rand.Read(salt)
@@ -27,7 +27,7 @@ func GenerateSalt() (string, error) {
 	return base64.URLEncoding.EncodeToString(salt), nil
 }
 
-// HashPassword создает комбинированную строку: "соль:хеш"
+// HashPassword create combine string
 func HashPassword(password string) (string, error) {
 	salt, err := GenerateSalt()
 	if err != nil {
@@ -40,7 +40,7 @@ func HashPassword(password string) (string, error) {
 	return fmt.Sprintf("%s:%x", salt, hash), nil
 }
 
-// VerifyPassword проверяет пароль
+// VerifyPassword check password
 func VerifyPassword(password string, combinedHash string) bool {
 	parts := strings.Split(combinedHash, ":")
 	if len(parts) != 2 {

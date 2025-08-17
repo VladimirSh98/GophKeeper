@@ -28,7 +28,7 @@ func (db *DBConnectionStruct) CloseConnection() {
 	db.Conn.Close()
 }
 
-// Ping пингует базу
+// Ping ping db
 func (db *DBConnectionStruct) Ping() error {
 	return db.Conn.Ping()
 }
