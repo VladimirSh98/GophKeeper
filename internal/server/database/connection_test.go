@@ -4,6 +4,7 @@ import (
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/VladimirSh98/GophKeeper/internal/server/config"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"testing"
 )
 
@@ -35,4 +36,15 @@ func TestCloseConnection(t *testing.T) {
 	conn.CloseConnection()
 
 	assert.NoError(t, err)
+}
+
+func TestDBConnectionPing(t *testing.T) {
+	cfg := &config.Config{}
+	err := config.LoadConfig(cfg)
+	require.NoError(t, err, "Ошибка загрузки конфигурации")
+	dbConn := DBConnectionStruct{Cfg: cfg}
+	err = dbConn.OpenConnection()
+	require.NoError(t, err, "Ошибка открытия соединения с БД")
+	err = dbConn.Ping()
+	require.NoError(t, err, "Ping к БД не успешен")
 }
