@@ -8,7 +8,6 @@ import (
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"google.golang.org/protobuf/encoding/protojson"
-	"google.golang.org/protobuf/proto"
 )
 
 // Get all secrets
@@ -35,7 +34,7 @@ func (s *Service) Get(cmd *cobra.Command, args []string) {
 
 func printResponse(response *pb.GetSecretsResponse) {
 	for _, secret := range response.GetSecrets() {
-		record, err := parseSecret(secret)
+		record, err := parseSecret(secret.DataType, secret.Content)
 		if err != nil {
 			continue
 		}
@@ -53,40 +52,5 @@ func printResponse(response *pb.GetSecretsResponse) {
 			utils.ColorMessage("Дополнительные данные секрета: %s", color.FgHiBlue, secret.Metadata)
 		}
 		utils.ColorMessage("---", color.FgHiWhite)
-	}
-}
-
-func parseSecret(secret *pb.SecretModel) (proto.Message, error) {
-	switch secret.DataType {
-	case pb.DataType_LOGIN_PASSWORD:
-		var data pb.LoginPass
-		if err := proto.Unmarshal(secret.Content, &data); err != nil {
-			return nil, fmt.Errorf("ошибка распаковки LoginPassword: %w", err)
-		}
-		return &data, nil
-
-	case pb.DataType_BANK_CARD:
-		var data pb.BankCard
-		if err := proto.Unmarshal(secret.Content, &data); err != nil {
-			return nil, fmt.Errorf("ошибка распаковки BankCard: %w", err)
-		}
-		return &data, nil
-
-	case pb.DataType_TEXT_DATA:
-		var data pb.TextData
-		if err := proto.Unmarshal(secret.Content, &data); err != nil {
-			return nil, fmt.Errorf("ошибка распаковки TextData: %w", err)
-		}
-		return &data, nil
-
-	case pb.DataType_BINARY_DATA:
-		var data pb.BinaryData
-		if err := proto.Unmarshal(secret.Content, &data); err != nil {
-			return nil, fmt.Errorf("ошибка распаковки BinaryData: %w", err)
-		}
-		return &data, nil
-
-	default:
-		return nil, fmt.Errorf("неизвестный тип секрета: %v", secret.DataType)
 	}
 }

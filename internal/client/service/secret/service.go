@@ -20,6 +20,9 @@ type ServiceInterface interface {
 	Get(cmd *cobra.Command, args []string)
 	CreateText(cmd *cobra.Command, args []string)
 	CreateBinary(cmd *cobra.Command, args []string)
+	CreateBankCard(cmd *cobra.Command, args []string)
+	CreateLoginPass(cmd *cobra.Command, args []string)
+	Update(cmd *cobra.Command, args []string)
 }
 
 // NewService create new service

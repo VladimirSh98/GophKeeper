@@ -16,6 +16,9 @@ type HandlerInterface interface {
 	GetCmd() *cobra.Command
 	CreateTextCmd() *cobra.Command
 	CreateBinaryCmd() *cobra.Command
+	CreateBankCardCmd() *cobra.Command
+	CreateLoginPassCmd() *cobra.Command
+	UpdateCmd() *cobra.Command
 }
 
 // NewHandler new user handler
