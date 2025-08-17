@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Secret_Create_FullMethodName = "/proto.Secret/Create"
-	Secret_Update_FullMethodName = "/proto.Secret/Update"
-	Secret_Delete_FullMethodName = "/proto.Secret/Delete"
-	Secret_Get_FullMethodName    = "/proto.Secret/Get"
+	Secret_Create_FullMethodName  = "/proto.Secret/Create"
+	Secret_Update_FullMethodName  = "/proto.Secret/Update"
+	Secret_Delete_FullMethodName  = "/proto.Secret/Delete"
+	Secret_Get_FullMethodName     = "/proto.Secret/Get"
+	Secret_GetByID_FullMethodName = "/proto.Secret/GetByID"
 )
 
 // SecretClient is the client API for Secret service.
@@ -33,6 +34,7 @@ type SecretClient interface {
 	Update(ctx context.Context, in *EditSecretRequest, opts ...grpc.CallOption) (*SecretModel, error)
 	Delete(ctx context.Context, in *DeleteSecretRequest, opts ...grpc.CallOption) (*SecretModel, error)
 	Get(ctx context.Context, in *GetSecretsRequest, opts ...grpc.CallOption) (*GetSecretsResponse, error)
+	GetByID(ctx context.Context, in *GetSecretByIDRequest, opts ...grpc.CallOption) (*SecretModel, error)
 }
 
 type secretClient struct {
@@ -79,6 +81,15 @@ func (c *secretClient) Get(ctx context.Context, in *GetSecretsRequest, opts ...g
 	return out, nil
 }
 
+func (c *secretClient) GetByID(ctx context.Context, in *GetSecretByIDRequest, opts ...grpc.CallOption) (*SecretModel, error) {
+	out := new(SecretModel)
+	err := c.cc.Invoke(ctx, Secret_GetByID_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SecretServer is the server API for Secret service.
 // All implementations must embed UnimplementedSecretServer
 // for forward compatibility
@@ -87,6 +98,7 @@ type SecretServer interface {
 	Update(context.Context, *EditSecretRequest) (*SecretModel, error)
 	Delete(context.Context, *DeleteSecretRequest) (*SecretModel, error)
 	Get(context.Context, *GetSecretsRequest) (*GetSecretsResponse, error)
+	GetByID(context.Context, *GetSecretByIDRequest) (*SecretModel, error)
 	mustEmbedUnimplementedSecretServer()
 }
 
@@ -105,6 +117,9 @@ func (UnimplementedSecretServer) Delete(context.Context, *DeleteSecretRequest) (
 }
 func (UnimplementedSecretServer) Get(context.Context, *GetSecretsRequest) (*GetSecretsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+func (UnimplementedSecretServer) GetByID(context.Context, *GetSecretByIDRequest) (*SecretModel, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetByID not implemented")
 }
 func (UnimplementedSecretServer) mustEmbedUnimplementedSecretServer() {}
 
@@ -191,6 +206,24 @@ func _Secret_Get_Handler(srv interface{}, ctx context.Context, dec func(interfac
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Secret_GetByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSecretByIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SecretServer).GetByID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Secret_GetByID_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SecretServer).GetByID(ctx, req.(*GetSecretByIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Secret_ServiceDesc is the grpc.ServiceDesc for Secret service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -213,6 +246,10 @@ var Secret_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Get",
 			Handler:    _Secret_Get_Handler,
+		},
+		{
+			MethodName: "GetByID",
+			Handler:    _Secret_GetByID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

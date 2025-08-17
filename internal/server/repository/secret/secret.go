@@ -88,3 +88,15 @@ func (repo *Repo) DeleteByID(
 	}
 	return secret, nil
 }
+
+// GetSecretByIDUser get not archived secret by id for user
+func (repo *Repo) GetSecretByIDUser(ctx context.Context, secretID int, login string) (Secret, error) {
+	query := "SELECT s.* FROM \"secrets\" s JOIN \"user\" u on u.id = s.user_id WHERE u.login = $1 and s.id = $2 and s.archived = $3;"
+	row := repo.Conn.QueryRowContext(ctx, query, login, secretID, false)
+	var secret Secret
+	err := row.Scan(&secret.ID, &secret.UserID, &secret.Archived, &secret.CreatedAt, &secret.UpdatedAt, &secret.DataType, &secret.Content, &secret.Metadata)
+	if err != nil {
+		return secret, err
+	}
+	return secret, nil
+}

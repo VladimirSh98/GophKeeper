@@ -16,7 +16,7 @@ func (h *Handler) UpdateCmd() *cobra.Command {
 	cmd.Flags().StringP("number", "n", "", "Номер карты")
 	cmd.Flags().StringP("expiry_month", "e", "", "Месяц срока действия")
 	cmd.Flags().StringP("expiry_year", "y", "", "Год срока действия")
-	cmd.Flags().StringP("holder_name", "h", "", "Владелец")
+	cmd.Flags().String("holder_name", "", "Владелец")
 	cmd.Flags().StringP("cvv", "c", "", "CVV")
 	// login pass
 	cmd.Flags().StringP("login", "l", "", "Логин")

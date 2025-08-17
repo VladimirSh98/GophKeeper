@@ -33,7 +33,6 @@ func (s *Service) CreateLoginPass(cmd *cobra.Command, args []string) {
 			metadata[parts[0]] = parts[1]
 		}
 	}
-	println()
 	var content []byte
 	content, err = proto.Marshal(&pb.LoginPass{Login: login, Password: password})
 	if err != nil {

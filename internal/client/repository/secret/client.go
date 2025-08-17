@@ -33,6 +33,7 @@ type ClientInterface interface {
 		metadata map[string]string,
 	) (*pb.SecretModel, error)
 	Get(ctx context.Context, token string) (*pb.GetSecretsResponse, error)
+	GetByID(ctx context.Context, token string, secretID int) (*pb.SecretModel, error)
 	Update(
 		ctx context.Context,
 		token string,

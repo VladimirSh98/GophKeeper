@@ -63,6 +63,3 @@ func Run() (App, error) {
 		RootCommand: rootCmd,
 	}, nil
 }
-
-// go build -o myapp ./cmd/client
-// ./myapp --help

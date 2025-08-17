@@ -20,6 +20,7 @@ type Repository interface {
 		metadata []byte,
 	) (Secret, error)
 	GetSecretsByUser(ctx context.Context, login string) ([]Secret, error)
+	GetSecretByIDUser(ctx context.Context, secretID int, login string) (Secret, error)
 	UpdateByID(
 		ctx context.Context,
 		login string,
