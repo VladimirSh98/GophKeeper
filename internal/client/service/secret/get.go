@@ -49,7 +49,7 @@ func printResponse(response *pb.GetSecretsResponse) {
 		utils.ColorMessage("Номер секрета: %s", color.FgHiBlue, fmt.Sprintf("%d", secret.Id))
 		utils.ColorMessage("Секрет: %s", color.FgHiBlue, string(out))
 		if len(secret.Metadata) > 0 {
-			utils.ColorMessage("Дополнительные данные секрета: %s", color.FgHiBlue, secret.Metadata)
+			utils.ColorMessage("Дополнительные данные секрета: %s", color.FgHiBlue, formatMetadata(secret.Metadata))
 		}
 		utils.ColorMessage("---", color.FgHiWhite)
 	}

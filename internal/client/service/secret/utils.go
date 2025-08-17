@@ -4,6 +4,7 @@ import (
 	"fmt"
 	pb "github.com/VladimirSh98/GophKeeper/proto"
 	"google.golang.org/protobuf/proto"
+	"strings"
 )
 
 func parseSecret(contentType pb.DataType, content []byte) (proto.Message, error) {
@@ -39,4 +40,15 @@ func parseSecret(contentType pb.DataType, content []byte) (proto.Message, error)
 	default:
 		return nil, fmt.Errorf("неизвестный тип секрета: %v", contentType)
 	}
+}
+
+func formatMetadata(md map[string]string) string {
+	if len(md) == 0 {
+		return "(нет метаданных)"
+	}
+	var parts []string
+	for k, v := range md {
+		parts = append(parts, fmt.Sprintf("%s=%s", k, v))
+	}
+	return strings.Join(parts, " ")
 }

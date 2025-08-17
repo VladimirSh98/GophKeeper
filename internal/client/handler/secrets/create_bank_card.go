@@ -7,14 +7,14 @@ func (h *Handler) CreateBankCardCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "createBankSecret",
 		Short: "Добавление банковской карты",
-		Run:   h.secretService.CreateBinary,
+		Run:   h.secretService.CreateBankCard,
 	}
 	cmd.Flags().StringP("number", "n", "", "Номер карты")
-	cmd.Flags().StringP("expiry_month", "exp_m", "", "Месяц срока действия")
-	cmd.Flags().StringP("expiry_year", "exp_у", "", "Год срока действия")
-	cmd.Flags().StringP("holder_name", "name", "", "Владелец")
-	cmd.Flags().StringP("cvv", "cvv", "", "CVV")
-	cmd.Flags().StringP("metadata", "m", "", "Доп инфо")
+	cmd.Flags().StringP("expiry_month", "e", "", "Месяц срока действия")
+	cmd.Flags().StringP("expiry_year", "y", "", "Год срока действия")
+	cmd.Flags().String("holder_name", "", "Владелец")
+	cmd.Flags().StringP("cvv", "c", "", "CVV")
+	cmd.Flags().StringArrayP("metadata", "m", []string{}, "Доп инфо")
 	cmd.MarkFlagRequired("number")
 	cmd.MarkFlagRequired("expiry_month")
 	cmd.MarkFlagRequired("expiry_year")

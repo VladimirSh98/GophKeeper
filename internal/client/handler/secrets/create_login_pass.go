@@ -10,8 +10,8 @@ func (h *Handler) CreateLoginPassCmd() *cobra.Command {
 		Run:   h.secretService.CreateLoginPass,
 	}
 	cmd.Flags().StringP("login", "l", "", "Логин")
-	cmd.Flags().StringP("password", "pass", "", "Пароль")
-	cmd.Flags().StringP("metadata", "m", "", "Доп инфо")
+	cmd.Flags().StringP("password", "p", "", "Пароль")
+	cmd.Flags().StringArrayP("metadata", "m", []string{}, "Доп инфо")
 	cmd.MarkFlagRequired("login")
 	cmd.MarkFlagRequired("password")
 	return cmd

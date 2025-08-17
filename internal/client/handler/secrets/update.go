@@ -10,17 +10,17 @@ func (h *Handler) UpdateCmd() *cobra.Command {
 		Run:   h.secretService.Update,
 	}
 	cmd.Flags().IntP("secret", "s", 0, "Номер секрета")
-	cmd.Flags().StringP("metadata", "m", "", "Доп инфо")
+	cmd.Flags().StringArrayP("metadata", "m", []string{}, "Доп инфо")
 	cmd.MarkFlagRequired("secret")
 	// bank card
 	cmd.Flags().StringP("number", "n", "", "Номер карты")
-	cmd.Flags().StringP("expiry_month", "exp_m", "", "Месяц срока действия")
-	cmd.Flags().StringP("expiry_year", "exp_у", "", "Год срока действия")
-	cmd.Flags().StringP("holder_name", "name", "", "Владелец")
-	cmd.Flags().StringP("cvv", "cvv", "", "CVV")
+	cmd.Flags().StringP("expiry_month", "e", "", "Месяц срока действия")
+	cmd.Flags().StringP("expiry_year", "y", "", "Год срока действия")
+	cmd.Flags().StringP("holder_name", "h", "", "Владелец")
+	cmd.Flags().StringP("cvv", "c", "", "CVV")
 	// login pass
 	cmd.Flags().StringP("login", "l", "", "Логин")
-	cmd.Flags().StringP("password", "pass", "", "Пароль")
+	cmd.Flags().StringP("password", "p", "", "Пароль")
 	// text
 	cmd.Flags().StringP("text", "t", "", "Текст секрета")
 	// binary

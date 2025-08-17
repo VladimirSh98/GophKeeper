@@ -43,5 +43,4 @@ func (s *Service) CreateText(cmd *cobra.Command, args []string) {
 		return
 	}
 	utils.ColorMessage("Секрет успешно сохранен", color.FgHiGreen)
-
 }

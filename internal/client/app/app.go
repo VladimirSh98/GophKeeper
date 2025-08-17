@@ -52,7 +52,11 @@ func Run() (App, error) {
 	rootCmd.AddCommand(userHandler.DeleteCmd())
 	rootCmd.AddCommand(secretHandler.DeleteCmd())
 	rootCmd.AddCommand(secretHandler.GetCmd())
+	rootCmd.AddCommand(secretHandler.UpdateCmd())
 	rootCmd.AddCommand(secretHandler.CreateTextCmd())
+	rootCmd.AddCommand(secretHandler.CreateBinaryCmd())
+	rootCmd.AddCommand(secretHandler.CreateLoginPassCmd())
+	rootCmd.AddCommand(secretHandler.CreateBankCardCmd())
 	return App{
 		Logger:      initLogger,
 		Client:      serverConn,

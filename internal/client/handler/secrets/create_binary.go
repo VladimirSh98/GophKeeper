@@ -10,7 +10,7 @@ func (h *Handler) CreateBinaryCmd() *cobra.Command {
 		Run:   h.secretService.CreateBinary,
 	}
 	cmd.Flags().StringP("binary", "b", "", "Текст секрета")
-	cmd.Flags().StringP("metadata", "m", "", "Доп инфо")
+	cmd.Flags().StringArrayP("metadata", "m", []string{}, "Доп инфо")
 	cmd.MarkFlagRequired("binary")
 	return cmd
 }
