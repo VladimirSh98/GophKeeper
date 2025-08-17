@@ -16,8 +16,8 @@ type Grpc struct {
 	logger     *zap.Logger
 }
 
-// NewUserGrpc new grpc secret
-func NewUserGrpc(userRepo user.Repository, secretRepo secret.Repository, logger *zap.Logger) *Grpc {
+// NewSecretGrpc new grpc secret
+func NewSecretGrpc(userRepo user.Repository, secretRepo secret.Repository, logger *zap.Logger) *Grpc {
 	return &Grpc{userRepo: userRepo, secretRepo: secretRepo, logger: logger}
 }
 

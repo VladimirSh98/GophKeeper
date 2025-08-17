@@ -50,7 +50,7 @@ func NewApp() (*App, error) {
 	auth := authService.NewService(cfg)
 	userGrpcService := userGrpc.NewUserGrpc(userRepo, secretRepo, auth, initLogger)
 	userGrpcService.RegisterService(newGrpcServer.GetServer())
-	secretGrpcService := secretGrpc.NewUserGrpc(userRepo, secretRepo, initLogger)
+	secretGrpcService := secretGrpc.NewSecretGrpc(userRepo, secretRepo, initLogger)
 	secretGrpcService.RegisterService(newGrpcServer.GetServer())
 
 	return &App{
